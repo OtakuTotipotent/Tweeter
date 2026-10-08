@@ -18,7 +18,7 @@
     <body>
         <nav class="navbar navbar-expand-lg bg-body-tertiary">
             <div class="container-fluid">
-                <a class="navbar-brand" href="/tweet">Tweeter</a>
+                <a class="navbar-brand" href="{% url 'tweet_list' %}">Tweeter</a>
                 <button class="navbar-toggler"
                         type="button"
                         data-bs-toggle="collapse"
@@ -31,41 +31,31 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#">Home</a>
+                            <a class="nav-link" href="{% url 'tweet_list' %}">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Users</a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle"
-                               href="#"
-                               role="button"
-                               data-bs-toggle="dropdown"
-                               aria-expanded="false">Features</a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Action One</a></li>
-                                <li><a class="dropdown-item" href="#">Action Two</a></li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-                                <li><a class="dropdown-item" href="#">Action Three</a></li>
-                            </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-                        </li>
+                        {% if user.is_authenticated %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'tweet_create' %}">Create Tweet</a>
+                            </li>
+                        {% endif %}
                     </ul>
-                    <form class="d-flex" role="search">
-                        <input class="form-control me-2"
-                               type="search"
-                               placeholder="Search"
-                               aria-label="Search" />
-                        <button class="btn btn-outline-success" type="submit">Search</button>
-                    </form>
+
+                    <div class="d-flex align-items-center gap-2">
+                        {% if user.is_authenticated %}
+                            <span class="navbar-text">@{{ user.username }}</span>
+                            <form method="post" action="{% url 'logout' %}" class="m-0">
+                                {% csrf_token %}
+                                <button class="btn btn-outline-danger" type="submit">Logout</button>
+                            </form>
+                        {% else %}
+                            <a class="btn btn-outline-primary" href="{% url 'login' %}">Login</a>
+                            <a class="btn btn-primary" href="{% url 'register' %}">Register</a>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </nav>
-        {% comment %} Content {% endcomment %}
+
         <div class="container">
             {% block content %}
             {% endblock content %}

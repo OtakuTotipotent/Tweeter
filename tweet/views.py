@@ -4,8 +4,6 @@ from django.shortcuts import get_object_or_404, redirect, render
 from .forms import TweetForm
 from .models import Tweet
 
-# Create your views here.
-
 
 def index(request):
     return render(request, "index.html")
@@ -38,13 +36,12 @@ def tweet_edit(request, tweet_id):
     if request.method == "POST":
         form = TweetForm(request.POST, request.FILES, instance=tweet)
         if form.is_valid():
-            tweet.user = request.user
-            tweet.save()
+            form.save()
             return redirect("tweet_list")
     else:
         form = TweetForm(instance=tweet)
 
-    return render(request, "tweet_form.html", {"form": form})
+    return render(request, "tweet_form.html", {"form": form, "tweet": tweet})
 
 
 @login_required

@@ -1,5 +1,5 @@
 {% extends "layout.html" %}
-{% block title %}Create & Update{% endblock title %}
+{% block title %}{% if form.instance.pk %}Edit Tweet{% else %}Create Tweet{% endif %}{% endblock title %}
 {% block content %}
     <h1 class="text-center mt-4">
         {% if form.instance.pk %}
@@ -8,10 +8,25 @@
             Create a Tweet of Yours
         {% endif %}
     </h1>
-    <form method="post" enctype="multipart/form-date" class="form">
+
+    <form method="post" enctype="multipart/form-data" class="form">
         {% csrf_token %}
         {{ form.as_p }}
+
+        {% if tweet.photo %}
+            <div class="mb-3">
+                <p class="mb-2">Current image:</p>
+                <img src="{{ tweet.photo.url }}"
+                     class="img-fluid rounded"
+                     alt="Current tweet image"
+                     style="max-height: 300px; object-fit: contain;"
+                     height="300px"
+                     width="300px">
+            </div>
+        {% endif %}
+
         <button class="btn btn-primary" type="submit">Submit</button>
     </form>
+
     <a href="{% url 'tweet_list' %}">Cancel and Back to Tweets</a>
 {% endblock content %}
