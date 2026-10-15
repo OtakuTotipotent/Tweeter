@@ -10,5 +10,6 @@
         "sknycb",
         "sqlparse",
         "tzdata"
-    ]
+    ],
+    "djlint.showInstallError": false
 }
